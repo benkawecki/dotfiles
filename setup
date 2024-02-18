@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# This script exists to easily setup my configuration on a new machine.
+# Check if homebrew exists and if not install homebrew
+
+if ! command -v homebrew &>/dev/null; then
+	echo "homebrew not found..."
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+# brew packages to install mac
+brew install nvim tmux ripgrep tldr jq yq fzf
+brew install tldr
+brew install pyenv pyenv-virtualenv pipx
+
+brew tap homebrew/cask-fonts
+brew install font-hack-nerd-font
+
+export XDG_CONFIG_HOME="$HOME"/.config
+mkdir -p "$XDG_CONFIG_HOME"/alacritty
+
+# # set up git prompt
+# curl -L https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh >"$XDG_CONFIG_HOME"/bash/git-prompt.sh
+
+# # Symbolic links
+
+ln -sf "$PWD/alacritty/alacritty.toml" "$XDG_CONFIG_HOME"/alacritty.toml
+ln -sf "$PWD/.zshrc" "$HOME"/.zshrc
+ln -sf "$PWD/.tmux.conf" "$HOME"/.tmux.conf
+ln -sf "$PWD/nvim" "$XDG_CONFIG_HOME"/nvim
