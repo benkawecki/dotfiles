@@ -1,17 +1,12 @@
 return {
   -- add gruvbox
-  {
-    "sainnhe/sonokai",
-    opts = {
-      sonokai_theme = "atlantis",
-    },
-  },
+  { "ellisonleao/gruvbox.nvim" },
 
   -- Configure LazyVim to load gruvbox
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "sonokai",
+      colorscheme = "gruvbox",
     },
   },
 }

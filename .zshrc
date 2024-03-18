@@ -71,7 +71,8 @@ eval "$(pyenv init --path)" # This only sets up the path stuff.
 eval "$(pyenv init -)" # This makes pyenv work in the shell.
 eval "$(pyenv virtualenv-init -)" # Enabling virtualenv so it works natively.
 
-
+# Rust configuration 
+. "$HOME/.cargo/env"
 
 # Google Cloud configuration 
 # The next line updates PATH for the Google Cloud SDK.
@@ -90,7 +91,9 @@ fi
 
 
 # Docker configuration 
-source $HOME/.docker/init-zsh.sh || true # Added by Docker Desktop
+if [ -f "$HOME/.docker/init-zsh.sh" ]; then
+    source $HOME/.docker/init-zsh.sh || true; # Added by Docker Desktop
+fi
 
 
 # Load other configuraton files
