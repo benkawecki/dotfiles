@@ -8,3 +8,9 @@ size = 25
 [font.normal]
 family = "Hack Nerd Font"
 
+# Colors (Gruvbox Material Medium Dark)
+
+# Default colors
+[colors.primary]
+background = '#282828'
+foreground = '#d4be98'
