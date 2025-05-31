@@ -1,18 +1,14 @@
-# Ben Kawecki's Dotfile 
+# Dotfiles
 
-## Introduction
-Seemlessly portable consistant configuration
+## Tools
 
-## Goals/Rules
-1. Portability (Mac only, for private and personal)
+- nvim
+- tmux
+- ripgrep
+- jq
+- yq
+- fzf
+- alacritty
+- nerd-fonts
 
-## Backport
-* Git
-* bashrc
-* Poetry config 
-* Tooling setup (brew, etc)
-
-## Dotfile Example repos
-* https://github.com/mischavandenburg/dotfiles
-* https://github.com/ThePrimeagen/.dotfiles
 

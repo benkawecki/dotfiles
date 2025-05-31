@@ -1,0 +1,10 @@
+font:
+  size: 18
+  normal:
+    family: "Hack Nerd Font"
+
+colors:
+  primary:
+    background: '#282828'
+      #   foreground: '#d4be98'
+
