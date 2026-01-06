@@ -112,9 +112,23 @@ return {
 	},
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
+		lazy = false,
+		branch = "main",
 		build = ":TSUpdate",
-		opts = {
-			ensure_installed = {
+		config = function()
+			local ts = require("nvim-treesitter")
+
+			-- (Optional) install_dir is the only thing the README shows in setup :contentReference[oaicite:3]{index=3}
+			ts.setup({
+				install_dir = vim.fn.stdpath("data") .. "/site",
+			})
+
+			-- Prefer git instead of curl (if the old knob still exists in your version)
+			pcall(function()
+				require("nvim-treesitter.install").prefer_git = true
+			end)
+
+			local parsers = {
 				"bash",
 				"c",
 				"diff",
@@ -132,24 +146,36 @@ return {
 				"yaml",
 				"toml",
 				"dockerfile",
-				"proto",
-			},
-			-- Autoinstall languages that are not installed
-			auto_install = false, -- set to false for issues with installing with ext_proxy
-			highlight = {
-				enable = true,
-				-- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-				--  If you are experiencing weird indenting issues, add the language to
-				--  the list of additional_vim_regex_highlighting and disabled languages for indent.
-				additional_vim_regex_highlighting = { "ruby" },
-			},
-			indent = { enable = true, disable = { "ruby" } },
-		},
-		config = function(_, opts)
-			-- Prefer git instead of curl in order to improve connectivity in some environments
-			require("nvim-treesitter.install").prefer_git = true
-			---@diagnostic disable-next-line: missing-fields
-			require("nvim-treesitter.configs").setup(opts)
+				-- "proto",
+			}
+
+			-- Replaces ensure_installed + auto_install=false
+			-- (install is a no-op if already installed; runs async) :contentReference[oaicite:4]{index=4}
+			ts.install(parsers)
+
+			-- Highlighting is now enabled via Neovim's treesitter API :contentReference[oaicite:5]{index=5}
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = parsers,
+				callback = function()
+					vim.treesitter.start()
+				end,
+			})
+
+			-- Your old: indent.enable = true, disable = { "ruby" }
+			-- On main: set indentexpr per-filetype :contentReference[oaicite:6]{index=6}
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = parsers,
+				callback = function(args)
+					if vim.bo[args.buf].filetype ~= "ruby" then
+						vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+					end
+				end,
+			})
+
+			-- Your old: additional_vim_regex_highlighting = { "ruby" }
+			-- Equivalent-ish: keep Vim's regex syntax enabled for Ruby alongside TS highlight.
+			-- (syntax is global; this mirrors the old “also use regex” intent)
+			vim.cmd("syntax on")
 		end,
 	},
 }

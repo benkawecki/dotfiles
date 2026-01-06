@@ -3,6 +3,7 @@ local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 -- install lazy from source if not present
 if not vim.loop.fs_stat(lazypath) then
+	vim.notify("Lazy not found, installing lazy", vim.log.levels.INFO)
 	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
 	vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=v10.20.3", lazyrepo, lazypath })
 end
