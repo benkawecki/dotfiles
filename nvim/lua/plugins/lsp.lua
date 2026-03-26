@@ -45,12 +45,17 @@ return {
 					-- map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
 					map("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
 					-- map("gr", , "[G]oto [R]eferences")
-					-- map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+					map("gI", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
 					-- map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 					-- map("gs", vim.lsp.buf.signature_help, "Signature Documentation")
 					map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 					map("K", vim.lsp.buf.hover, "Hover Documentation")
+					map(
+						"<leader>v",
+						"<cmd>vsplit | lua vim.lsp.buf.definition()<cr>",
+						"Goto Definition in Vertical Split"
+					)
 
 					-- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
 					---@param client vim.lsp.Client
@@ -170,6 +175,17 @@ return {
 							checkThirdParty = false,
 						},
 						telemetry = { enable = false },
+					},
+				},
+			})
+
+			vim.lsp.config("pyright", {
+				settings = {
+					python = {
+						analysis = {
+							logLevel = "Trace",
+						},
+						useLibraryCodeForTypes = true,
 					},
 				},
 			})
