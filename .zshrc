@@ -14,6 +14,14 @@ precmd() {
 # Enable substitution in the prompt.
 setopt prompt_subst
 
+#  History configuration
+HISTFILE=~/.zsh_history
+HISTSIZE=50000
+SAVEHIST=50000
+setopt INC_APPEND_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+
 # Config for the prompt. PS1 synonym.
 prompt='%2/ ${vcs_info_msg_0_}> '
 
@@ -51,6 +59,45 @@ alias dka='docker container kill $(docker ps -q)'
 alias tarball="tar -zcvf"                   # Preferred 'tar' implementation
 alias vrc="vim ~/.vimrc"
 alias zrc="vim ~/.zshrc"
+
+# fzf history search (current terminal)
+fh() {
+  local out key cmd
+  out=$(fc -l 1 | fzf --tac --no-sort --expect=ctrl-e) || return
+  key=$(head -1 <<< "$out")
+  cmd=$(tail -1 <<< "$out")
+  [[ -z "$cmd" ]] && return
+  cmd="${cmd#*[0-9]  }"
+  if [[ "$key" == "ctrl-e" ]]; then
+    local tmpfile=$(mktemp)
+    echo "$cmd" > "$tmpfile"
+    $EDITOR "$tmpfile"
+    local edited=$(cat "$tmpfile")
+    rm "$tmpfile"
+    [[ -n "$edited" ]] && print -z "$edited"
+  else
+    print -z "$cmd"
+  fi
+}
+
+# fzf history search (all terminals)
+fha() {
+  local out key cmd
+  out=$(cat ~/.zsh_history | fzf --tac --no-sort --expect=ctrl-e) || return
+  key=$(head -1 <<< "$out")
+  cmd=$(tail -1 <<< "$out")
+  [[ -z "$cmd" ]] && return
+  if [[ "$key" == "ctrl-e" ]]; then
+    local tmpfile=$(mktemp)
+    echo "$cmd" > "$tmpfile"
+    $EDITOR "$tmpfile"
+    local edited=$(cat "$tmpfile")
+    rm "$tmpfile"
+    [[ -n "$edited" ]] && print -z "$edited"
+  else
+    print -z "$cmd"
+  fi
+}
  
 
 
