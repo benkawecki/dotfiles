@@ -17,6 +17,7 @@ return {
 				"yamlls",
 				"pyright",
 				"lua_ls",
+				"ts_ls",
 				-- "stylua",
 				-- "tsserver",
 			},
